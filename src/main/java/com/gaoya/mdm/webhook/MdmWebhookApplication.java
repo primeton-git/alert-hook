@@ -1,8 +1,8 @@
 package com.gaoya.mdm.webhook;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import org.springframework.boot.SpringApplication;
@@ -25,7 +25,9 @@ public class MdmWebhookApplication {
 		SpringApplication.run(MdmWebhookApplication.class, args);
 	}
 
-	private List<Map<String, Object>> latest = new ArrayList<>(10);
+	private static final int LIMIT = 20;
+
+	private List<Map<String, Object>> latest = new LinkedList<>();
 
 	@GetMapping(value = "/api/mdm/hook", consumes = ALL_VALUE)
 	public List<Map<String, Object>> latest() {
@@ -38,7 +40,7 @@ public class MdmWebhookApplication {
 		System.out.println(body);
 		System.out.println("\n");
 
-		while (latest.size() >= 10) {
+		while (latest.size() >= LIMIT) {
 			latest.remove(latest.size() - 1);
 		}
 		Map<String, Object> data = new HashMap<>();
