@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +23,9 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @SpringBootApplication
 public class MdmWebhookApplication {
 
+	@Value("${ws.port:12346}")
+	private int port;
+
 	public static void main(String[] args) {
 		SpringApplication.run(MdmWebhookApplication.class, args);
 	}
@@ -32,9 +36,9 @@ public class MdmWebhookApplication {
 
 	@GetMapping(value = "/api/test/hook", consumes = ALL_VALUE)
 	public String testCallWebService() throws Exception {
-		MdmDataModelWebhookService service = new MdmDataModelWebhookService(new URL("http", "192.168.8.145", 12346, "/ws/webhook?wsdl"));
+		MdmDataModelWebhookService service = new MdmDataModelWebhookService(new URL("http", "0.0.0.0", port, "/ws/webhook?wsdl"));
 		com.gaoya.mdm.webhook.cxf.MdmDataModelWebhook webhook = service.getPort(com.gaoya.mdm.webhook.cxf.MdmDataModelWebhook.class);
-		return webhook.hook(new Date().toString());
+		return webhook.hook("Foo", new Date().toString());
 	}
 
 	@GetMapping(value = "/api/mdm/hook", consumes = ALL_VALUE)
