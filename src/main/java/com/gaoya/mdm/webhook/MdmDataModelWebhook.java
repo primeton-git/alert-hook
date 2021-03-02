@@ -9,9 +9,9 @@ import javax.jws.soap.SOAPBinding;
 public class MdmDataModelWebhook {
 
     @WebMethod
-    public String hook(String xmlContent) {
+    public String hook(String message) {
         System.out.println("Receive a data message:\n");
-        System.out.println(xmlContent);
+        System.out.println(message);
         return "OK";
     }
 
