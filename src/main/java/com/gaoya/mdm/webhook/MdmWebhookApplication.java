@@ -1,5 +1,6 @@
 package com.gaoya.mdm.webhook;
 
+import java.net.URL;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -28,6 +29,13 @@ public class MdmWebhookApplication {
 	private static final int LIMIT = 20;
 
 	private List<Map<String, Object>> latest = new LinkedList<>();
+
+	@GetMapping(value = "/api/test/hook", consumes = ALL_VALUE)
+	public String testCallWebService() throws Exception {
+		MdmDataModelWebhookService service = new MdmDataModelWebhookService(new URL("http", "192.168.8.145", 12346, "/ws/webhook?wsdl"));
+		com.gaoya.mdm.webhook.cxf.MdmDataModelWebhook webhook = service.getPort(com.gaoya.mdm.webhook.cxf.MdmDataModelWebhook.class);
+		return webhook.hook(new Date().toString());
+	}
 
 	@GetMapping(value = "/api/mdm/hook", consumes = ALL_VALUE)
 	public List<Map<String, Object>> latest() {
