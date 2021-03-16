@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -34,6 +35,9 @@ public class MdmWebhookApplication {
 
 	private List<Map<String, Object>> latest = new LinkedList<>();
 
+	@Autowired
+	private HelloSocketEndpoint socketEndpoint;
+
 	@GetMapping(value = "/api/test/hook", consumes = ALL_VALUE)
 	public String testCallWebService() throws Exception {
 		MdmDataModelWebhookService service = new MdmDataModelWebhookService(new URL("http", "0.0.0.0", port, "/ws/webhook?wsdl"));
@@ -44,6 +48,11 @@ public class MdmWebhookApplication {
 	@GetMapping(value = "/api/mdm/hook", consumes = ALL_VALUE)
 	public List<Map<String, Object>> latest() {
 		return latest;
+	}
+
+	@GetMapping(value = "/api/mdm/socket", consumes = ALL_VALUE)
+	public List<Map<String, Object>> socketLatestPush() {
+		return socketEndpoint.getLatest();
 	}
 
 	@PostMapping(value = "/api/mdm/hook", consumes = ALL_VALUE, produces = APPLICATION_JSON_VALUE)
