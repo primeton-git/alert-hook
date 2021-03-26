@@ -11,13 +11,14 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
 @Component
-public class HelloSocketEndpoint {
+public class HelloSocketEndpoint implements ApplicationListener<ApplicationReadyEvent> {
 
     @Value("${socket.host:localhost}")
     private String host;
@@ -31,7 +32,6 @@ public class HelloSocketEndpoint {
 
     private List<Map<String, Object>> latest = new LinkedList<>();
 
-    @PostConstruct
     public void boot() {
         try {
             socket = new DatagramSocket(port, InetAddress.getByName(host));
@@ -89,6 +89,14 @@ public class HelloSocketEndpoint {
 
     public List<Map<String, Object>> getLatest() {
         return latest;
+    }
+
+    @Override
+    public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
+        Thread thread = new Thread(this::boot);
+        thread.setName("socket-daemon");
+        thread.setDaemon(true);
+        thread.start();
     }
 
 }

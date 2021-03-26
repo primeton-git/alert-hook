@@ -35,7 +35,7 @@ public class MdmWebhookApplication {
 
 	private List<Map<String, Object>> latest = new LinkedList<>();
 
-	@Autowired
+	@Autowired(required = false)
 	private HelloSocketEndpoint socketEndpoint;
 
 	@GetMapping(value = "/api/test/hook", consumes = ALL_VALUE)
