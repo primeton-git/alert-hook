@@ -50,6 +50,11 @@ public class MdmWebhookApplication {
 		return latest;
 	}
 
+	@GetMapping(value = "/api/mdm/ws", consumes = ALL_VALUE)
+	public List<Map<String, Object>> wsLatestPush() {
+		return MdmDataModelWebhook.getLatest();
+	}
+
 	@GetMapping(value = "/api/mdm/socket", consumes = ALL_VALUE)
 	public List<Map<String, Object>> socketLatestPush() {
 		return socketEndpoint.getLatest();
