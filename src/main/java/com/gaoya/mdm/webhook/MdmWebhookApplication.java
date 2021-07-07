@@ -61,7 +61,7 @@ public class MdmWebhookApplication {
 	}
 
 	@PostMapping(value = "/api/mdm/hook", consumes = ALL_VALUE, produces = APPLICATION_JSON_VALUE)
-	public String hook(@RequestBody String body, @RequestParam("model") String code) {
+	public String hook(@RequestBody List<Map<String, Object>> body, @RequestParam("model") String code) {
 		System.out.println("MDM: " + code);
 		System.out.println(body);
 		System.out.println("\n");
@@ -71,10 +71,28 @@ public class MdmWebhookApplication {
 		}
 		Map<String, Object> data = new HashMap<>();
 		data.put("time", new Date());
-		data.put("data", body);data.put("data", body);
+		data.put("data", body);
 		data.put("model", code);
 		latest.add(0, data);
-		return body;
+		return "OK";
+	}
+
+	@GetMapping(value = "/api/mdm/ping", consumes = ALL_VALUE)
+	public String ping() {
+		return "pong@" + System.currentTimeMillis();
+	}
+
+	@PostMapping(value = "/api/mdm/webhook", consumes = ALL_VALUE, produces = APPLICATION_JSON_VALUE)
+	public void webhook(@RequestBody List<Map<String, Object>> entities, @RequestParam("model") String model) {
+		System.out.println(entities);
+		while (latest.size() >= LIMIT) {
+			latest.remove(latest.size() - 1);
+		}
+		Map<String, Object> data = new HashMap<>();
+		data.put("time", new Date());
+		data.put("data", entities);
+		data.put("model", model);
+		latest.add(0, data);
 	}
 
 }
