@@ -7,6 +7,7 @@ public class HelloBinaryTest {
         System.out.println(Integer.toBinaryString(2));
         System.out.println(Integer.toBinaryString(3));
         System.out.println(Integer.toBinaryString(4));
+        System.out.println(Integer.toBinaryString(Integer.MAX_VALUE));
 
         System.out.println();
 
@@ -14,6 +15,9 @@ public class HelloBinaryTest {
         System.out.println(Integer.parseInt("10", 2)); // 二进制转换为十进制
         System.out.println(Integer.parseInt("11", 2)); // 二进制转换为十进制
         System.out.println(Integer.parseInt("100", 2)); // 二进制转换为十进制
+        System.out.println(Integer.parseInt(Integer.toBinaryString(Integer.MAX_VALUE), 2)); // 二进制转换为十进制
+        System.out.println(Integer.parseInt(Integer.toBinaryString(Integer.MAX_VALUE), 2) == Integer.MAX_VALUE); // 二进制转换为十进制
+        System.out.println();
 
         System.out.println("\n");
 

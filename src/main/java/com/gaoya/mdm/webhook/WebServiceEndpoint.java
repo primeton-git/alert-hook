@@ -17,7 +17,7 @@ public class WebServiceEndpoint {
     protected Endpoint endpoint;
 
     @PostConstruct
-    public void init() {
+    public void afterInjection() {
         String address = "http://0.0.0.0:" + port + "/ws/webhook";
         endpoint = Endpoint.publish(address, new MdmDataModelWebhook());
         System.out.println("Endpoint: " + address);

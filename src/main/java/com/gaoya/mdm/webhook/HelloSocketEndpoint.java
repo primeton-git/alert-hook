@@ -61,7 +61,7 @@ public class HelloSocketEndpoint implements ApplicationListener<ApplicationReady
 
                 byte[] binary = request.getData();
 
-                String content = new String(binary, 0, len);
+                String content = new String(binary, 0, len, "UTF-8");
                 while (latest.size() >= LIMIT) {
                     latest.remove(latest.size() - 1);
                 }
